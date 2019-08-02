@@ -1,0 +1,47 @@
+{
+  "defaultSeverity": "warning",
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "no-trailing-whitespace": false,
+    "no-var-keyword": true,
+    "comment-format": [
+      true,
+      "check-space"
+    ],
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
+    "curly": false,
+    "quotemark": false,
+    "prefer-const": false,
+    "member-access": false,
+    "arrow-parens": false,
+    "interface-name": [true, "never-prefix"],
+    "forin": false,
+    "object-literal-sort-keys": false,
+    "trailing-comma": false,
+    "ordered-imports": false,
+    "no-console": false,
+    "only-arrow-functions": false,
+    "no-unused-expression": false
+  }
+}
