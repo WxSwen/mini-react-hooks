@@ -10,14 +10,16 @@ const useHover = (element: Element): [React.ReactElement<any>, boolean] => {
   const [state, setState] = useState(false);
 
   const onMouseEnter = (originalOnMouseEnter?:any) => (event: any) => {
+    // 类似装饰器作用，执行原有操作
     (originalOnMouseEnter || noop)(event);
     setState(true);
   }
   const onMouseLeave = (originalOnMouseLeave?:any) => (event: any) => {
+    // 类似装饰器作用，执行原有操作
     (originalOnMouseLeave || noop)(event);
     setState(false);
   }
-
+  
   if (typeof element === 'function') {
     element = element(state);
   }
