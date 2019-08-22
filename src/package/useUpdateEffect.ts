@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+// 忽略第一次更新，其余跟useEffect一致
 const useUpdateEffect: typeof useEffect = (effect, deps) => {
   const isInitialMount = useRef(true);
 
