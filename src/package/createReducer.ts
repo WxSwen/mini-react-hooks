@@ -14,7 +14,7 @@ function composeMiddleware(chain) {
 
 const createReducer = (...middlewares) => {
   // 支持中间件
-  let middleware = composeMiddleware(middlewares);
+  let composedMiddleware = composeMiddleware(middlewares);
 
   // 接受reducer和初始化state参数，返回 state和dispatch
   return (reducer, initialState, initializer = value => value) => {
@@ -22,13 +22,29 @@ const createReducer = (...middlewares) => {
 
 
     // 保证每次dispatch都会经过每个middleware
-    let dispatchs = useCallback(
+    const dispatch = useCallback(
       action =>{
-        middleware(reducer, action);
-        ref.current = reducer(action);
+        ref.current = reducer(ref.current, action);
+        // setState
         return action;
       },
-      [reducer]);
+      [reducer]
+    );
+
+    const dispatchRef = useRef(
+      composedMiddleware(
+        {
+          getState: () => ref.current,
+          dispatch: (...args) => dispatchRef.current(...args)
+        },
+        dispatch
+      )
+    );
+
+    // 第一次不执行
+    useUpdateEffect(() => {
+
+    }, [dispatch])
 
 
     return [ref.current, dispatchs];
