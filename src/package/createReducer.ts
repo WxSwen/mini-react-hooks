@@ -1,102 +1,102 @@
-import { useCallback, useRef, useState } from 'react';
-import useUpdateEffect from './useUpdateEffect';
+// import { useCallback, useRef, useState } from 'react';
+// import useUpdateEffect from './useUpdateEffect';
 
-// 模拟redux实现 getState / dispatch 等方法
-// 添加中间件
+// // 模拟redux实现 getState / dispatch 等方法
+// // 添加中间件
 
-function composeMiddleware(chain) {
-  return (context, dispatch) => {
-    return chain.reduceRight((res, middleware) => {
-      return middleware(context)(res);
-    }, dispatch);
-  }
-};
+// function composeMiddleware(chain) {
+//   return (context, dispatch) => {
+//     return chain.reduceRight((res, middleware) => {
+//       return middleware(context)(res);
+//     }, dispatch);
+//   }
+// };
 
-const createReducer = (...middlewares) => {
-  // 支持中间件
-  let composedMiddleware = composeMiddleware(middlewares);
+// const createReducer = (...middlewares) => {
+//   // 支持中间件
+//   let composedMiddleware = composeMiddleware(middlewares);
 
-  // 接受reducer和初始化state参数，返回 state和dispatch
-  return (reducer, initialState, initializer = value => value) => {
-    let ref = useRef(initializer(initialState));
-
-
-    // 保证每次dispatch都会经过每个middleware
-    const dispatch = useCallback(
-      action =>{
-        ref.current = reducer(ref.current, action);
-        // setState
-        return action;
-      },
-      [reducer]
-    );
-
-    const dispatchRef = useRef(
-      composedMiddleware(
-        {
-          getState: () => ref.current,
-          dispatch: (...args) => dispatchRef.current(...args)
-        },
-        dispatch
-      )
-    );
-
-    // 第一次不执行
-    useUpdateEffect(() => {
-
-    }, [dispatch])
+//   // 接受reducer和初始化state参数，返回 state和dispatch
+//   return (reducer, initialState, initializer = value => value) => {
+//     let ref = useRef(initializer(initialState));
 
 
-    return [ref.current, dispatchs];
-  }
-}
+//     // 保证每次dispatch都会经过每个middleware
+//     const dispatch = useCallback(
+//       action =>{
+//         ref.current = reducer(ref.current, action);
+//         // setState
+//         return action;
+//       },
+//       [reducer]
+//     );
+
+//     const dispatchRef = useRef(
+//       composedMiddleware(
+//         {
+//           getState: () => ref.current,
+//           dispatch: (...args) => dispatchRef.current(...args)
+//         },
+//         dispatch
+//       )
+//     );
+
+//     // 第一次不执行
+//     useUpdateEffect(() => {
+
+//     }, [dispatch])
 
 
-// import { createReducer } from 'react-use';
-// import logger from 'redux-logger';
-// import thunk from 'redux-thunk';
-
-// const useThunkReducer = createReducer(thunk, logger);
-
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case 'increment':
-//       return { count: state.count + 1 };
-//     case 'decrement':
-//       return { count: state.count - 1 };
-//     case 'reset':
-//       return { count: action.payload };
-//     default:
-//       throw new Error();
+//     return [ref.current, dispatchs];
 //   }
 // }
 
-// const Demo = ({ initialCount = 1 }) => {
-//   // Action creator to increment count, wait a second and then reset
-//   const addAndReset = React.useCallback(() => {
-//     return dispatch => {
-//       dispatch({ type: 'increment' });
 
-//       setTimeout(() => {
-//         dispatch({ type: 'reset', payload: initialCount });
-//       }, 1000);
-//     };
-//   }, [initialCount]);
+// // import { createReducer } from 'react-use';
+// // import logger from 'redux-logger';
+// // import thunk from 'redux-thunk';
 
-//   const [state, dispatch] = useThunkReducer(reducer, initialCount);
+// // const useThunkReducer = createReducer(thunk, logger);
 
-//   return (
-//     <div>
-//       <p>count: {state.count}</p>
-//       <button onClick={() => dispatch(addAndReset())}>Add and reset</button>
-//       <button
-//         onClick={() => dispatch({ type: 'reset', payload: initialCount })}
-//       >
-//         Reset
-//       </button>
-//       <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-//       <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
-//     </div>
-//   );
-// };
+// // function reducer(state, action) {
+// //   switch (action.type) {
+// //     case 'increment':
+// //       return { count: state.count + 1 };
+// //     case 'decrement':
+// //       return { count: state.count - 1 };
+// //     case 'reset':
+// //       return { count: action.payload };
+// //     default:
+// //       throw new Error();
+// //   }
+// // }
+
+// // const Demo = ({ initialCount = 1 }) => {
+// //   // Action creator to increment count, wait a second and then reset
+// //   const addAndReset = React.useCallback(() => {
+// //     return dispatch => {
+// //       dispatch({ type: 'increment' });
+
+// //       setTimeout(() => {
+// //         dispatch({ type: 'reset', payload: initialCount });
+// //       }, 1000);
+// //     };
+// //   }, [initialCount]);
+
+// //   const [state, dispatch] = useThunkReducer(reducer, initialCount);
+
+// //   return (
+// //     <div>
+// //       <p>count: {state.count}</p>
+// //       <button onClick={() => dispatch(addAndReset())}>Add and reset</button>
+// //       <button
+// //         onClick={() => dispatch({ type: 'reset', payload: initialCount })}
+// //       >
+// //         Reset
+// //       </button>
+// //       <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+// //       <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+// //     </div>
+// //   );
+// // };
 

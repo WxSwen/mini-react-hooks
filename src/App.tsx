@@ -1,31 +1,33 @@
 import * as React from 'react';
 import './App.css';
-import useMountedState from './package/useMountedState'; 
 
-const Demo = () => {
-  const isMounted = useMountedState();
-  const [state, useState] = React.useState(false);
+function Example() {
+  const [count, setCount] = React.useState(0);
 
-  React.useEffect(() => {
+  function handleAlertClick() {
     setTimeout(() => {
-      if (isMounted()) {
-        useState(isMounted());
-      } else {
-        useState(isMounted());
-      }
-    }, 1000);
-  }, []);
+      alert('You clicked on: ' + count);
+    }, 3000);
+  }
 
   return (
-    <div>{state ? '1' : '2'}</div>
-  )
-};
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <button onClick={handleAlertClick}>
+        Show alert
+      </button>
+    </div>
+  );
+}
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <Demo></Demo>
+        <Example></Example>
       </div>
     );
   }
