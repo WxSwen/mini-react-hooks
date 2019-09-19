@@ -21,6 +21,7 @@ const useBeforeUnload = (enabled: boolean = true, message?: string) => {
     return () => window.removeEventListener('beforeunload', handler);
   }, [message, enabled]);
 }
+export default useBeforeUnload;
 
 // const Demo = () => {
 //   const [dirty, toggleDirty] = useToggle(false);

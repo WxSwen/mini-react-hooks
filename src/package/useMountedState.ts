@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-// 判断是否monted完
+// 判断是否mounted完
 export default function useMountedState(): () => boolean {
   const mountedRef = useRef(false);
 

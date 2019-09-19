@@ -42,6 +42,7 @@
     "ordered-imports": false,
     "no-console": false,
     "only-arrow-functions": false,
-    "no-unused-expression": false
+    "no-unused-expression": false,
+    "unusedImports": false
   }
 }

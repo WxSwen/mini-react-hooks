@@ -1,33 +1,33 @@
 import * as React from 'react';
 import './App.css';
+import useCustom from './package/useReducerHook/useReducerHook';
 
-function Example() {
-  const [count, setCount] = React.useState(0);
+const Counter = () => {
+  const [globalState, setGlobalState] = useCustom();
 
-  function handleAlertClick() {
-    setTimeout(() => {
-      alert('You clicked on: ' + count);
-    }, 3000);
+  const add1Global = () => {
+    const newCounterValue = 'red';
+    setGlobalState({ color: newCounterValue });
   }
 
   return (
     <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-      <button onClick={handleAlertClick}>
-        Show alert
+      <p>
+        次数：
+        { globalState.color }
+      </p>
+      <button type="button" onClick={add1Global}>
+        + 1
       </button>
     </div>
-  );
+  )
 }
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <Example></Example>
+        <Counter></Counter>
       </div>
     );
   }
