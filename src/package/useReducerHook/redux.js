@@ -326,7 +326,10 @@
 
 
 // 中间件
-function createStore(reducer, initState) {
+function createStore(reducer, initState, rewriteCreateStoreFunc) {
+  if (rewriteCreateStoreFunc) {
+    return rewriteCreateStoreFunc(createStore)(reducer, initState);
+  }
   let state = initState;
   let listeners = [];
 
@@ -420,3 +423,6 @@ const applyMiddleware = function(...middlewares) {
     }
   }
 }
+
+const rewriteCreateStoreFunc = applyMiddleware(exceptionMiddleware, loggerMiddleware, timeMiddleware);
+const store = createStore(reducer, initState, rewriteCreateStoreFunc);
