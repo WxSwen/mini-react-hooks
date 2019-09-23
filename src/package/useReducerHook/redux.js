@@ -324,3 +324,99 @@
 // /*这里看看初始化的 state 是什么*/
 // console.log(store.getState());
 
+
+// 中间件
+function createStore(reducer, initState) {
+  let state = initState;
+  let listeners = [];
+
+  function subscribe(listener) {
+    listeners.push(listener);
+  }
+  function dispatch(action) {
+    state = reducer(state, action);
+    listeners.forEach(listener => listener());
+
+    return 
+  }
+  function getState() {
+    return state;
+  }
+
+  dispatch({ type: Symbol() });
+
+  return {
+    subscribe,
+    dispatch,
+    getState
+  }
+};
+
+let initState = {
+  count: 1
+};
+function reducer(state, action) {
+  if (!state) {
+    state = initState;
+  }
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        ...state,
+        count: state.count + 1
+      }
+    case 'DECREMENT':
+      return {
+        ...state,
+        count: state.count - 1
+      }
+    default:
+      return state;
+  }
+};
+// const store = createStore(reducer);
+// const next = store.dispatch;
+
+const exceptionMiddleware = (store) => (next) => (action) => {
+  try {
+    next(action);
+  } catch(err) {
+    console.error('错误报告：', err);
+  }
+}
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log('this state', store.getState());
+  console.log('action', action);
+  next(action);
+  console.log('next state', store.getState());
+}
+const timeMiddleware = (store) => (next) => (action) => {
+  console.log('time', new Date().getTime());
+  next(action);
+}
+
+// const logger = loggerMiddleware(store);
+// const exception = exceptionMiddleware(store);
+// store.dispatch = exception(logger(next));
+
+// 构造applyMiddleware
+const newCreateStore = applyMiddleware(exceptionMiddleware, timeMiddleware, loggerMiddleware)(createStore);
+const store = newCreateStore(reducer);
+
+const applyMiddleware = function(...middlewares) {
+  return function rewriteCreateStoreFunc(oldCreateStore) {
+    return function newCreateStore(reducer, initState) {
+      const store = oldCreateStore(reducer, initState);
+
+      const dispatch = store.dispatch;
+
+      middlewares.reverse().forEach(middleware => {
+        dispatch = middleware(dispatch);
+      });
+
+      store.dispatch = dispatch;
+
+      return store;
+    }
+  }
+}
