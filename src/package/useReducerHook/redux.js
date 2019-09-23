@@ -335,6 +335,10 @@ function createStore(reducer, initState, rewriteCreateStoreFunc) {
 
   function subscribe(listener) {
     listeners.push(listener);
+    return function unsubscribe() {
+      const index= listeners.indexOf(listener);
+      listeners.splice(index, 1);
+    }
   }
   function dispatch(action) {
     state = reducer(state, action);
@@ -426,3 +430,4 @@ const applyMiddleware = function(...middlewares) {
 
 const rewriteCreateStoreFunc = applyMiddleware(exceptionMiddleware, loggerMiddleware, timeMiddleware);
 const store = createStore(reducer, initState, rewriteCreateStoreFunc);
+
