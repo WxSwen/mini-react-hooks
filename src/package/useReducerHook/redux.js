@@ -326,107 +326,240 @@
 
 
 // 中间件
+// function createStore(reducer, initState, rewriteCreateStoreFunc) {
+//   // const store = createStore(reducer, rewriteCreateStoreFunc);
+//   // 允许不传initState
+//   if (typeof initState === 'function') {
+//     rewriteCreateStoreFunc = initState;
+//     initState = undefined;
+//   }
+//   if (rewriteCreateStoreFunc) {
+//     return rewriteCreateStoreFunc(createStore)(reducer, initState);
+//   }
+//   let state = initState;
+//   let listeners = [];
+
+//   function subscribe(listener) {
+//     listeners.push(listener);
+//     return function unsubscribe() {
+//       const index= listeners.indexOf(listener);
+//       listeners.splice(index, 1);
+//     }
+//   }
+//   function dispatch(action) {
+//     state = reducer(state, action);
+//     listeners.forEach(listener => listener());
+//   }
+//   function getState() {
+//     return state;
+//   }
+
+//   function replaceReducer(nextReducer) {
+//     reducer = nextReducer;
+//     dispatch({ type: Symbol() });
+//   }
+
+//   dispatch({ type: Symbol() });
+
+//   return {
+//     subscribe,
+//     dispatch,
+//     getState,
+//     replaceReducer
+//   }
+// };
+
+// let initState = {
+//   count: 1
+// };
+// function reducer(state, action) {
+//   if (!state) {
+//     state = initState;
+//   }
+//   switch (action.type) {
+//     case 'INCREMENT':
+//       return {
+//         ...state,
+//         count: state.count + 1
+//       }
+//     case 'DECREMENT':
+//       return {
+//         ...state,
+//         count: state.count - 1
+//       }
+//     default:
+//       return state;
+//   }
+// };
+// // const store = createStore(reducer);
+// // const next = store.dispatch;
+
+// const exceptionMiddleware = (store) => (next) => (action) => {
+//   try {
+//     next(action);
+//   } catch(err) {
+//     console.error('错误报告：', err);
+//   }
+// }
+// const loggerMiddleware = (store) => (next) => (action) => {
+//   console.log('this state', store.getState());
+//   console.log('action', action);
+//   next(action);
+//   console.log('next state', store.getState());
+// }
+// const timeMiddleware = (store) => (next) => (action) => {
+//   console.log('time', new Date().getTime());
+//   next(action);
+// }
+
+// // const logger = loggerMiddleware(store);
+// // const exception = exceptionMiddleware(store);
+// // store.dispatch = exception(logger(next));
+
+// // 构造applyMiddleware
+// const newCreateStore = applyMiddleware(exceptionMiddleware, timeMiddleware, loggerMiddleware)(createStore);
+// const store = newCreateStore(reducer);
+
+// // const chain = [A, B, C];
+// // dispatch = compose(...chain)(store.dispatch)
+// const compose = function(...funcs) {
+//   if (funcs.length === 1) {
+//     return funcs[0]
+//   }
+
+//   return funcs.reduceRight((a, b) => (...args) => a(b(...args)));
+// }
+
+// const applyMiddleware = function(...middlewares) {
+//   return function rewriteCreateStoreFunc(oldCreateStore) {
+//     return function newCreateStore(reducer, initState) {
+//       const store = oldCreateStore(reducer, initState);
+
+//       // const chain = middlewares.map(middleware => middleware(store));
+//       // 只提供getstate方法
+//       const simpleStore = { getState: store.getState };
+//       const chain = middlewares.map(middleware => middleware(simpleStore));
+
+//       const dispatch = store.dispatch;
+
+//       chain.reverse().map(middleware => {
+//         dispatch = middleware(dispatch);
+//       });
+
+//       store.dispatch = dispatch;
+
+//       return store;
+//     }
+//   }
+// }
+
+// const rewriteCreateStoreFunc = applyMiddleware(exceptionMiddleware, loggerMiddleware, timeMiddleware);
+// const store = createStore(reducer, initState, rewriteCreateStoreFunc);
+
+
+// store
 function createStore(reducer, initState, rewriteCreateStoreFunc) {
+  if (typeof initState === 'function') {
+    rewriteCreateStoreFunc = initState;
+    initState = undefined;
+  }
   if (rewriteCreateStoreFunc) {
     return rewriteCreateStoreFunc(createStore)(reducer, initState);
   }
-  let state = initState;
   let listeners = [];
+  let state = initState;
 
   function subscribe(listener) {
     listeners.push(listener);
-    return function unsubscribe() {
-      const index= listeners.indexOf(listener);
+    
+    let unsubscribe = function() {
+      let index = listeners.indexOf(listener);
       listeners.splice(index, 1);
     }
+    return unsubscribe;
   }
   function dispatch(action) {
-    state = reducer(state, action);
-    listeners.forEach(listener => listener());
-
-    return 
+    state = reducer(action);
+    listeners.map(listener => listener());
   }
   function getState() {
     return state;
   }
-
-  dispatch({ type: Symbol() });
+  function replaceReducer(nextReducer) {
+    // 重置reducer
+    reducer = nextReducer;
+    dispatch({ type: Symbol() });
+  }
 
   return {
     subscribe,
     dispatch,
-    getState
+    getState,
+    replaceReducer
   }
 };
 
-let initState = {
-  count: 1
-};
-function reducer(state, action) {
-  if (!state) {
-    state = initState;
-  }
-  switch (action.type) {
-    case 'INCREMENT':
-      return {
-        ...state,
-        count: state.count + 1
-      }
-    case 'DECREMENT':
-      return {
-        ...state,
-        count: state.count - 1
-      }
-    default:
-      return state;
-  }
-};
-// const store = createStore(reducer);
-// const next = store.dispatch;
+// reducer
+const reducer = combineReducers({
+  counter: counterReducer,
+  info: InfoReducer
+});
+function combineReducers(reducers) {
+  let keys = Object.keys(reducers);
 
-const exceptionMiddleware = (store) => (next) => (action) => {
-  try {
-    next(action);
-  } catch(err) {
-    console.error('错误报告：', err);
+  return function reducers() {
+    for(let key in reducers) {
+
+    }
   }
 }
-const loggerMiddleware = (store) => (next) => (action) => {
-  console.log('this state', store.getState());
-  console.log('action', action);
-  next(action);
-  console.log('next state', store.getState());
+
+// middleware
+function compose(...funcs) {
+  if (funcs.length === 1) {
+    return funcs[0]
+  }
+  return funcs.reduceRight((a, b) => (...args) => a(b(...args)));
 }
-const timeMiddleware = (store) => (next) => (action) => {
-  console.log('time', new Date().getTime());
-  next(action);
-}
-
-// const logger = loggerMiddleware(store);
-// const exception = exceptionMiddleware(store);
-// store.dispatch = exception(logger(next));
-
-// 构造applyMiddleware
-const newCreateStore = applyMiddleware(exceptionMiddleware, timeMiddleware, loggerMiddleware)(createStore);
-const store = newCreateStore(reducer);
-
-const applyMiddleware = function(...middlewares) {
+function applyMiddleware(middlewares) {
   return function rewriteCreateStoreFunc(oldCreateStore) {
     return function newCreateStore(reducer, initState) {
-      const store = oldCreateStore(reducer, initState);
-
+      let store = oldCreateStore(reducer, initState);
+      // 只提供getState方法
+      const simpleStore = { getState: store.getState };
       const dispatch = store.dispatch;
+      // 相同结果
+      // compose(middlewares)(simpleStore).map(middleware => {
+      //   dispatch = middleware(store.dispatch)
+      // });
 
-      middlewares.reverse().forEach(middleware => {
-        dispatch = middleware(dispatch);
-      });
+      dispatch = compose(middlewares.map(
+          middleware => middleware(simpleStore)
+        )
+      )(dispatch)
 
       store.dispatch = dispatch;
-
       return store;
     }
   }
 }
+let exceptionMiddleware = (store) => (next) => (action) => {
+  try {
+    next(action);
+  } catch(err) {
+    console.log(err);
+  }
+}
+let loggerMiddleware = (store) => (next) => (action) => {
+  try {
+    let state = store.getState();
+    console.log(state);
+    next(action);
+    console.log(state);
+  } catch(err) {
+    console.log(err);
+  }
+};
 
 const rewriteCreateStoreFunc = applyMiddleware(exceptionMiddleware, loggerMiddleware, timeMiddleware);
 const store = createStore(reducer, initState, rewriteCreateStoreFunc);
