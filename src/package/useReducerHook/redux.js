@@ -505,12 +505,18 @@ const reducer = combineReducers({
   info: InfoReducer
 });
 function combineReducers(reducers) {
-  let keys = Object.keys(reducers);
+  let reducerKeys = Object.keys(reducers);
 
-  return function reducers() {
-    for(let key in reducers) {
+  return (state = {}, action) => {
+    const nextStates = {};
+    reducerKeys.forEach(key => {
+      const previousState = state[key];
 
-    }
+      const nextState = reducers[key](previousState, action);
+
+      nextStates[key] = nextState;
+    })
+    return nextStates;
   }
 }
 
