@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "release": "tsc ./src/package/index.ts --outDir package",
+    "release": "tsc ./src/package/index.ts --removeComments --outDir package",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },

@@ -6,12 +6,10 @@ var noop = function () { };
 var useHover = function (element) {
     var _a = useState(false), state = _a[0], setState = _a[1];
     var onMouseEnter = function (originalOnMouseEnter) { return function (event) {
-        // 类似装饰器作用，执行原有操作
         (originalOnMouseEnter || noop)(event);
         setState(true);
     }; };
     var onMouseLeave = function (originalOnMouseLeave) { return function (event) {
-        // 类似装饰器作用，执行原有操作
         (originalOnMouseLeave || noop)(event);
         setState(false);
     }; };
