@@ -1,8 +1,8 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "mini-react-hooks",
-  "main": "./src/package/index.js",
+  "main": "./package/index.js",
   "keywords": [
     "react-hooks"
   ],
@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "builded": "tsc",
+    "release": "tsc ./src/package/index.ts --outDir package",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
