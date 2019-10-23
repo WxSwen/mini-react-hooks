@@ -1,7 +1,13 @@
 {
-  "name": "apptest",
-  "version": "0.1.0",
-  "private": true,
+  "name": "mini-react-hooks",
+  "version": "0.1.1",
+  "description": "mini-react-hooks",
+  "main": "./src/package/index.js",
+  "keywords": [
+    "react-hooks"
+  ],
+  "author": "swen",
+  "license": "ISC",
   "dependencies": {
     "@types/reflect-metadata": "^0.1.0",
     "mem": "^4.0.0",
@@ -12,6 +18,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
+    "builded": "tsc",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },

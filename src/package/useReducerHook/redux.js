@@ -457,116 +457,28 @@
 // const store = createStore(reducer, initState, rewriteCreateStoreFunc);
 
 
-// store
-function createStore(reducer, initState, rewriteCreateStoreFunc) {
-  if (typeof initState === 'function') {
-    rewriteCreateStoreFunc = initState;
-    initState = undefined;
-  }
-  if (rewriteCreateStoreFunc) {
-    return rewriteCreateStoreFunc(createStore)(reducer, initState);
-  }
-  let listeners = [];
-  let state = initState;
 
-  function subscribe(listener) {
-    listeners.push(listener);
-    
-    let unsubscribe = function() {
-      let index = listeners.indexOf(listener);
-      listeners.splice(index, 1);
-    }
-    return unsubscribe;
-  }
-  function dispatch(action) {
-    state = reducer(action);
-    listeners.map(listener => listener());
-  }
+function createStore(initState) {
+  const listeners = [];
+  const state = initState;
+
   function getState() {
     return state;
   }
-  function replaceReducer(nextReducer) {
-    // 重置reducer
-    reducer = nextReducer;
-    dispatch({ type: Symbol() });
+  function subscribe(listener) {
+    listeners.push(listener);
+  }
+  function dispatch(action) {
+    state = action(state);
+
+    listeners.forEach(listener => listener());
   }
 
   return {
-    subscribe,
-    dispatch,
     getState,
-    replaceReducer
-  }
-};
-
-// reducer
-const reducer = combineReducers({
-  counter: counterReducer,
-  info: InfoReducer
-});
-function combineReducers(reducers) {
-  let reducerKeys = Object.keys(reducers);
-
-  return (state = {}, action) => {
-    const nextStates = {};
-    reducerKeys.forEach(key => {
-      const previousState = state[key];
-
-      const nextState = reducers[key](previousState, action);
-
-      nextStates[key] = nextState;
-    })
-    return nextStates;
+    dispatch,
+    subscribe,
+    
   }
 }
-
-// middleware
-function compose(...funcs) {
-  if (funcs.length === 1) {
-    return funcs[0]
-  }
-  return funcs.reduceRight((a, b) => (...args) => a(b(...args)));
-}
-function applyMiddleware(middlewares) {
-  return function rewriteCreateStoreFunc(oldCreateStore) {
-    return function newCreateStore(reducer, initState) {
-      let store = oldCreateStore(reducer, initState);
-      // 只提供getState方法
-      const simpleStore = { getState: store.getState };
-      const dispatch = store.dispatch;
-      // 相同结果
-      // compose(middlewares)(simpleStore).map(middleware => {
-      //   dispatch = middleware(store.dispatch)
-      // });
-
-      dispatch = compose(middlewares.map(
-          middleware => middleware(simpleStore)
-        )
-      )(dispatch)
-
-      store.dispatch = dispatch;
-      return store;
-    }
-  }
-}
-let exceptionMiddleware = (store) => (next) => (action) => {
-  try {
-    next(action);
-  } catch(err) {
-    console.log(err);
-  }
-}
-let loggerMiddleware = (store) => (next) => (action) => {
-  try {
-    let state = store.getState();
-    console.log(state);
-    next(action);
-    console.log(state);
-  } catch(err) {
-    console.log(err);
-  }
-};
-
-const rewriteCreateStoreFunc = applyMiddleware(exceptionMiddleware, loggerMiddleware, timeMiddleware);
-const store = createStore(reducer, initState, rewriteCreateStoreFunc);
 
