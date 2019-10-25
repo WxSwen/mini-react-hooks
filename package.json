@@ -1,6 +1,6 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "mini-react-hooks",
   "main": "package/index.js",
   "module": "package/index.js",
@@ -10,13 +10,17 @@
   "author": "swen",
   "license": "ISC",
   "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "@types/reflect-metadata": "^0.1.0",
+    "mem": "^4.0.0",
+    "react-scripts-ts": "3.1.0"
   },
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "release": "tsc ./src/package/index.ts --removeComments --outDir package && npm publish --registry http://registry.npmjs.org",
+    "release": "tsc ./src/package/index.ts --removeComments --outDir package --declaration",
+    "publishNpm": "npm publish --registry http://registry.npmjs.org",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
@@ -25,13 +29,10 @@
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@types/reflect-metadata": "^0.1.0",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
-    "typescript": "^3.5.3",
-    "mem": "^4.0.0",
-    "react-scripts-ts": "3.1.0"
+    "typescript": "^3.5.3"
   }
 }
