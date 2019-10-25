@@ -1,24 +1,17 @@
 import * as React from 'react';
 import './App.css';
-import useCustom from './package/useReducerHook/useReducerHook';
+import { useUnmount } from 'react-use';
+
 
 const Counter = () => {
-  const [globalState, setGlobalState] = useCustom();
-
-  const add1Global = () => {
-    const newCounterValue = 'red';
-    setGlobalState({ color: newCounterValue });
-  }
+  const Demo = () => {
+    useUnmount(() => alert('UNMOUNTED'));
+    return null;
+  };
 
   return (
     <div>
-      <p>
-        次数：
-        { globalState.color }
-      </p>
-      <button type="button" onClick={add1Global}>
-        + 1
-      </button>
+      <Demo></Demo>
     </div>
   )
 }

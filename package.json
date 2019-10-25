@@ -1,19 +1,17 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "mini-react-hooks",
-  "main": "./package/index.js",
+  "main": "package/index.js",
+  "module": "package/index.js",
   "keywords": [
     "react-hooks"
   ],
   "author": "swen",
   "license": "ISC",
   "dependencies": {
-    "@types/reflect-metadata": "^0.1.0",
-    "mem": "^4.0.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts-ts": "3.1.0"
+    "react-dom": "^16.8.6"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -23,10 +21,13 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/reflect-metadata": "^0.1.0",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "mem": "^4.0.0",
+    "react-scripts-ts": "3.1.0"
   }
 }
