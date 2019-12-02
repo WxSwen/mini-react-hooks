@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "release": "tsc ./src/package/index.ts --removeComments --outDir package --declaration",
+    "release": "tsc ./src/package/index.ts --removeComments --jsx Preserve --outDir package --declaration",
     "publishNpm": "npm publish --registry http://registry.npmjs.org",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"

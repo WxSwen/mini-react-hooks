@@ -22,3 +22,5 @@ var useUnmount_1 = require("./useUnmount");
 exports.useUnmount = useUnmount_1["default"];
 var useUpdateEffect_1 = require("./useUpdateEffect");
 exports.useUpdateEffect = useUpdateEffect_1["default"];
+var useLazyComponent_1 = require("./useLazyComponent");
+exports.useLazy = useLazyComponent_1["default"];

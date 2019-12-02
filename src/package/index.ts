@@ -9,7 +9,7 @@ export { default as useThrottleFn } from './useThrottleFn';
 export { default as useToggle } from './useToggle';
 export { default as useUnmount } from './useUnmount';
 export { default as useUpdateEffect } from './useUpdateEffect';
-
+export { default as useLazy } from './useLazyComponent'; 
 
 
 

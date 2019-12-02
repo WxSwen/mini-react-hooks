@@ -1,11 +1,11 @@
 // "use strict";
-import React, { useEffect, useState, useRef } from "react";
+import * as React from "react";
 
 function UseCreateLoadableComponent(opts) {
   let {
     loadFn
   } = opts;
-  let [state, setState] = useState(
+  let [state, setState] = React.useState(
     {
       error: null,
       loading: false,
@@ -13,14 +13,14 @@ function UseCreateLoadableComponent(opts) {
       ...opts
     }
   );
-  let res: any = useRef(null);
+  let res: any = React.useRef(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!res.current) {
       res.current = loadFn(state.loader);
     }
   }, []);
-  useEffect(() => {
+  React.useEffect(() => {
     if (!state.loading) {
       return;
     }
