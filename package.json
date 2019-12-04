@@ -1,6 +1,6 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "mini-react-hooks",
   "main": "package/index.js",
   "module": "package/index.js",
@@ -24,8 +24,8 @@
     "eject": "react-scripts-ts eject"
   },
   "peerDependencies": {
-    "react": "16.12.0",
-    "react-dom": "16.12.0"
+    "react": "^16.11.0",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",

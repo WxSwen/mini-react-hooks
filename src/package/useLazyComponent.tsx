@@ -1,26 +1,23 @@
 // "use strict";
-import * as React from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
+import useLayoutEffectOnce from "./useLayoutEffectOnce";
 
 function UseCreateLoadableComponent(opts) {
-  let {
-    loadFn
-  } = opts;
-  let [state, setState] = React.useState(
-    {
-      error: null,
-      loading: false,
-      loaded: null,
-      ...opts
-    }
-  );
-  let res: any = React.useRef(null);
+  let { loadFn } = opts;
+  let [state, setState] = useState({
+    error: null,
+    loading: false,
+    loaded: null,
+    ...opts
+  });
+  let res: any = useRef(null);
 
-  React.useEffect(() => {
+  useLayoutEffectOnce(() => {
     if (!res.current) {
       res.current = loadFn(state.loader);
     }
-  }, []);
-  React.useEffect(() => {
+  });
+  useLayoutEffect(() => {
     if (!state.loading) {
       return;
     }
@@ -36,19 +33,19 @@ function UseCreateLoadableComponent(opts) {
 
   return () => {
     if (state.loading || state.error) {
-      return <state.loading />
+      return <state.loading />;
     } else if (state.loaded) {
-      return <state.loaded.default />
+      return <state.loaded.default />;
     } else {
       return null;
     }
-  }
+  };
 }
 
 function CreateLoadableComponent(opts) {
   if (!opts.loading) {
     throw new Error("Requires a `loading` component");
-  };
+  }
   // 延迟执行UseCreateLoadableComponent
   return () => UseCreateLoadableComponent(opts)();
 }
@@ -78,11 +75,10 @@ function load(loader) {
 }
 
 function Loadable(opts) {
-  return CreateLoadableComponent({ ...opts, loadFn: load })
+  return CreateLoadableComponent({ ...opts, loadFn: load });
 }
 
 export default Loadable;
-
 
 // DEMO
 // const LoadableComponent = (loader) => {
@@ -93,6 +89,8 @@ export default Loadable;
 //     }
 //   })
 // };
-{/* <BrowserRouter></BrowserRouter>
+{
+  /* <BrowserRouter></BrowserRouter>
   <Route component={LoadableComponent(() => import('lazy'))}></Route>
-</BrowserRouter> */}
+</BrowserRouter> */
+}
