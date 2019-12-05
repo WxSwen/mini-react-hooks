@@ -9,5 +9,6 @@ export { default as useThrottleFn } from "./useThrottleFn";
 export { default as useToggle } from "./useToggle";
 export { default as useUnmount } from "./useUnmount";
 export { default as useUpdateEffect } from "./useUpdateEffect";
+export { default as useLayoutEffectOnce } from "./useLayoutEffectOnce";
 export { default as useLazy } from "./useLazyComponent";
 export { default as useFetch } from "./useFetch";
