@@ -24,3 +24,5 @@ var useUpdateEffect_1 = require("./useUpdateEffect");
 exports.useUpdateEffect = useUpdateEffect_1["default"];
 var useLazyComponent_1 = require("./useLazyComponent");
 exports.useLazy = useLazyComponent_1["default"];
+var useFetch_1 = require("./useFetch");
+exports.useFetch = useFetch_1["default"];
