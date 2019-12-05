@@ -22,3 +22,9 @@ export default opts => {
 
   return [{ data, isLoading, isError }];
 };
+
+// DEMO
+// const [{ data, isLoading }] = useFetch({
+//   initData: {},
+//   fetchFn: () => axios.post(url)
+// });
