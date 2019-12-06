@@ -1,3 +1,3 @@
-import * as React from "react";
-declare function Loadable(opts: any): () => React.CElement<any, React.Component<any, any, any>>;
+/// <reference types="react" />
+declare function Loadable(opts: any): () => import("react").CElement<any, import("react").Component<any, any, any>>;
 export default Loadable;
