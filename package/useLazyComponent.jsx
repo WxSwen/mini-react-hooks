@@ -11,18 +11,18 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-var react_1 = require("react");
+var React = require("react");
 var useLayoutEffectOnce_1 = require("./useLayoutEffectOnce");
 function UseCreateLoadableComponent(opts) {
     var loadFn = opts.loadFn;
-    var _a = react_1.useState(__assign({ error: null, loading: false, loaded: null }, opts)), state = _a[0], setState = _a[1];
-    var res = react_1.useRef(null);
+    var _a = React.useState(__assign({ error: null, loading: false, loaded: null }, opts)), state = _a[0], setState = _a[1];
+    var res = React.useRef(null);
     useLayoutEffectOnce_1["default"](function () {
         if (!res.current) {
             res.current = loadFn(state.loader);
         }
     });
-    react_1.useLayoutEffect(function () {
+    React.useLayoutEffect(function () {
         if (!state.loading) {
             return;
         }
@@ -35,10 +35,10 @@ function UseCreateLoadableComponent(opts) {
     }, [res.current]);
     return function () {
         if (state.loading || state.error) {
-            return <state.loading />;
+            return React.createElement(state.loading, null);
         }
         else if (state.loaded) {
-            return <state.loaded.default />;
+            return React.createElement(state.loaded["default"], __assign({}, state));
         }
         else {
             return null;

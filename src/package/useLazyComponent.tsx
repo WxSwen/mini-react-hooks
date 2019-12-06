@@ -1,23 +1,23 @@
 // "use strict";
-import React, { useState, useRef, useLayoutEffect } from "react";
+import * as React from "react";
 import useLayoutEffectOnce from "./useLayoutEffectOnce";
 
 function UseCreateLoadableComponent(opts) {
   let { loadFn } = opts;
-  let [state, setState] = useState({
+  let [state, setState] = React.useState({
     error: null,
     loading: false,
     loaded: null,
     ...opts
   });
-  let res: any = useRef(null);
+  let res: any = React.useRef(null);
 
   useLayoutEffectOnce(() => {
     if (!res.current) {
       res.current = loadFn(state.loader);
     }
   });
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (!state.loading) {
       return;
     }
@@ -33,9 +33,9 @@ function UseCreateLoadableComponent(opts) {
 
   return () => {
     if (state.loading || state.error) {
-      return <state.loading />;
+      return React.createElement(state.loading, null);
     } else if (state.loaded) {
-      return <state.loaded.default />;
+      return React.createElement(state.loaded.default, { ...state });
     } else {
       return null;
     }
