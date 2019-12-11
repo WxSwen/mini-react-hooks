@@ -1,16 +1,19 @@
-import { useState, useEffect, useRef } from "react";
-// import { createMemo } from "mini-react-hooks";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-// reset rebase history
-// pull push merge
-// stepto
+// history -> 提供effectFn
+// reset -> 直接删除后续节点
+// pull -> 直接合并，提供fn
+// push -> 直接合并到head，提供fn
+// merge -> 直接合并到当前，提供fn
+// checkout -> 提供stepTo
 
-const useLife = (initState, opts: any = { maxSteps: 5 }) => {
+const useLife = (initState, opts: any = { maxSteps: 5, reset: false }) => {
+  let { effectFn, maxSteps } = opts;
   let [state, setState] = useState(initState);
+  let [finalState, setFinalState] = useState(null);
   let [isTrigger, setIsTrigger] = useState(false);
   let storeData = useRef([]) as any;
-  let stepBy = useRef(0) as any;
-  let { effectFn, maxSteps, log, op } = opts;
+  let currentStep = useRef(0) as any;
 
   if (maxSteps < 0) {
     throw new Error("Step should be >= 0");
@@ -24,46 +27,75 @@ const useLife = (initState, opts: any = { maxSteps: 5 }) => {
       storeData.current.push({
         state
       });
-      effectFn && effectFn();
     };
-    executeQueue();
-    if (log) {
-      console.log(storeData.current);
+
+    if (!isTrigger) {
+      executeQueue();
     }
+    effectFn && effectFn(storeData.current);
+    setIsTrigger(false);
   }, [state]);
 
   useEffect(() => {
     if (isTrigger) {
-      let { state } = storeData.current[stepBy.current];
-      setState(state);
-      effectFn && effectFn();
+      setState(finalState);
     }
-    return () => {
-      setIsTrigger(false);
-    };
   }, [isTrigger]);
 
-  function stepToNumber(number) {
+  function getCurrentStep(number) {
     let storeMaxStep = storeData.current.length - 1;
+    let currentStep: number = 0;
 
     if (typeof number === "string" && number.toLocaleLowerCase() === "head") {
-      stepBy.current = storeMaxStep;
-    } else if (parseInt(number)) {
-      number = parseInt(number);
-      if (isNaN(number)) {
-        throw new Error("Please input correct step");
-      } else if (number < 0 || number > storeMaxStep) {
+      currentStep = storeMaxStep;
+    } else if (typeof parseInt(number) === "number") {
+      if (number < 0 || number > storeMaxStep) {
         throw new Error(`Step should be between 0 ~ ${storeMaxStep}`);
       } else {
-        stepBy.current = number;
+        currentStep = number;
       }
+    } else {
+      throw new Error("Please input correct step");
     }
-    // 内部触发
+    return currentStep;
+  }
+
+  function stepToNumber(number) {
+    currentStep.current = getCurrentStep(number);
+    let { state } = storeData.current[currentStep.current];
+    setFinalState(state);
     setIsTrigger(true);
   }
-  // const stepTo = createMemo(stepToNumber);
+  const stepTo = useCallback(stepToNumber, []);
 
-  return [state, setState, stepToNumber];
+  function execution(order, number, orderFn) {
+    let { state } = storeData.current[currentStep.current];
+    let headState = null;
+    let finalState = null;
+
+    if (order === "push" || order === "pull" || order === "merge") {
+      headState = (storeData.current[
+        order === "merge" ? number : storeData.current.length - 1
+      ] as any).state;
+
+      if (orderFn) {
+        finalState = orderFn(state, headState);
+      } else {
+        finalState = order === "push" ? state : headState;
+      }
+
+      setFinalState(finalState);
+      setIsTrigger(true);
+    } else if (order === "reset") {
+      storeData.current.splice(number, storeData.current.length - 1);
+      effectFn && effectFn(storeData.current);
+    } else {
+      throw new Error("No defind order");
+    }
+  }
+  const execute = useCallback(execution, []);
+
+  return [state, setState, stepTo, execute];
 };
 
 export default useLife;
