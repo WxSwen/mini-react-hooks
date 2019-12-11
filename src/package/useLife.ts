@@ -74,9 +74,10 @@ const useLife = (initState, opts: any = { maxSteps: 5, reset: false }) => {
     let finalState = null;
 
     if (order === "push" || order === "pull" || order === "merge") {
-      headState = (storeData.current[
-        order === "merge" ? number : storeData.current.length - 1
-      ] as any).state;
+      headState =
+        storeData.current[
+          order === "merge" ? number : storeData.current.length - 1
+        ].state;
 
       if (orderFn) {
         finalState = orderFn(state, headState);
