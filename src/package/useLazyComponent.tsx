@@ -31,11 +31,11 @@ function UseCreateLoadableComponent(opts) {
       });
   }, [res.current]);
 
-  return () => {
+  return (props) => {
     if (state.loading || state.error) {
-      return createElement(state.loading, null);
+      return createElement(state.loading, props);
     } else if (state.loaded) {
-      return createElement(state.loaded.default, { ...state });
+      return createElement(state.loaded.default, { ...state, ...props });
     } else {
       return null;
     }
@@ -47,7 +47,7 @@ function CreateLoadableComponent(opts) {
     throw new Error("Requires a `loading` component");
   }
   // 延迟执行UseCreateLoadableComponent
-  return () => UseCreateLoadableComponent(opts)();
+  return (props) => UseCreateLoadableComponent(opts)(props);
 }
 
 function load(loader) {
