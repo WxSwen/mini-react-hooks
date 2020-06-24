@@ -18,7 +18,6 @@ React use hooks.
 
 [How to fetch data with React Hooks?](https://www.robinwieruch.de/react-hooks-fetch-data)
 
-<!--
 ### Learn React Hooks
 
-[Learn React Hooks](https://subscription.packtpub.com/book/web_development/9781838641443/1/ch01lvl1sec04/getting-started-withand-xa0-react-hooks) -->
+[Learn React Hooks](https://subscription.packtpub.com/book/web_development/9781838641443/1/ch01lvl1sec04/getting-started-withand-xa0-react-hooks)
