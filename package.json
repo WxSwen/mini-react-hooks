@@ -1,6 +1,6 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "mini-react-hooks",
   "main": "package/index.js",
   "module": "package/index.js",
@@ -22,6 +22,10 @@
   "peerDependencies": {
     "react": "^16.11.0",
     "react-dom": "^16.8.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WxSwen/mini-react-hooks"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",

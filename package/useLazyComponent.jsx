@@ -33,12 +33,12 @@ function UseCreateLoadableComponent(opts) {
             setState(__assign(__assign({}, state), res.current));
         });
     }, [res.current]);
-    return function () {
+    return function (props) {
         if (state.loading || state.error) {
-            return react_1.createElement(state.loading, null);
+            return react_1.createElement(state.loading, props);
         }
         else if (state.loaded) {
-            return react_1.createElement(state.loaded["default"], __assign({}, state));
+            return react_1.createElement(state.loaded["default"], __assign(__assign({}, state), props));
         }
         else {
             return null;
@@ -49,7 +49,7 @@ function CreateLoadableComponent(opts) {
     if (!opts.loading) {
         throw new Error("Requires a `loading` component");
     }
-    return function () { return UseCreateLoadableComponent(opts)(); };
+    return function (props) { return UseCreateLoadableComponent(opts)(props); };
 }
 function load(loader) {
     var promise = loader();
