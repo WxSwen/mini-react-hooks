@@ -1,6 +1,6 @@
 {
   "name": "mini-react-hooks",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "mini-react-hooks",
   "main": "package/index.js",
   "module": "package/index.js",

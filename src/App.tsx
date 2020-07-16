@@ -1,19 +1,15 @@
-import * as React from 'react';
-import './App.css';
-import { useUnmount } from 'react-use';
+import * as React from "react";
+import "./App.css";
+import useInterval from "./package/useInterval";
 
+function Counter() {
+  const [count, setCount] = React.useState(0);
 
-const Counter = () => {
-  const Demo = () => {
-    useUnmount(() => alert('UNMOUNTED'));
-    return null;
-  };
+  useInterval(() => {
+    setCount(count + 1);
+  }, 1000);
 
-  return (
-    <div>
-      <Demo></Demo>
-    </div>
-  )
+  return <h1>{count}</h1>;
 }
 
 class App extends React.Component {

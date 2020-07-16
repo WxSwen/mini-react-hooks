@@ -12,3 +12,4 @@ export { default as useUpdateEffect } from "./useUpdateEffect";
 export { default as useLayoutEffectOnce } from "./useLayoutEffectOnce";
 export { default as useLazy } from "./useLazyComponent";
 export { default as useFetch } from "./useFetch";
+export { default as useInterval } from "./useInterval";
